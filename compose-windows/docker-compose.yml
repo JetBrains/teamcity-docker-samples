@@ -1,0 +1,15 @@
+version: "2.1"
+services:
+  server:
+    image: jetbrains/teamcity-server:latest-nanoserver
+    ports:
+      - "8111:8111"
+    volumes:
+      - ./teamcity-server/data:C:/ProgramData/JetBrains/TeamCity
+      - ./teamcity-server/logs:C:/TeamCity/logs
+    mem_limit: 2g
+  agent:
+    image: jetbrains/teamcity-agent:latest-nanoserver
+    environment:
+      - SERVER_URL=http://server:8111
+      - TEAMCITY_SERVER_MEM_OPTS=-Xmx2g -XX:ReservedCodeCacheSize=350m
