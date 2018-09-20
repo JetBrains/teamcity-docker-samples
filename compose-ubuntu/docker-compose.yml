@@ -1,19 +1,19 @@
 version: "3"
 services:
   server:
-    image: jetbrains/teamcity-server:latest
+    image: jetbrains/teamcity-server
     ports:
       - "8112:8111"
     volumes:
       - ./data_dir:/data/teamcity_server/datadir
       - ./log_dir:/opt/teamcity/logs
   teamcity-agent:
-    image: jetbrains/teamcity-agent:latest
+    image: jetbrains/teamcity-agent
     environment:
       - SERVER_URL=http://server:8111
       - AGENT_NAME=regular_agent
   teamcity-minimal-agent:
-    image: jetbrains/teamcity-minimal-agent:latest
+    image: jetbrains/teamcity-minimal-agent
     environment:
       - SERVER_URL=http://server:8111
       - AGENT_NAME=minimal_agent

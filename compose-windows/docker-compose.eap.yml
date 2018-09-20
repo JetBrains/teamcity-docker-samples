@@ -1,6 +1,6 @@
 version: "2.1"
 services:
   server:
-    image: jetbrains/teamcity-server:eap-nanoserver
+    image: jetbrains/teamcity-server:eap
   agent:
-    image: jetbrains/teamcity-agent:eap-nanoserver
+    image: jetbrains/teamcity-agent:eap
