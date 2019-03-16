@@ -7,13 +7,15 @@ services:
     volumes:
       - ./data_dir:/data/teamcity_server/datadir
       - ./log_dir:/opt/teamcity/logs
-  teamcity-agent:
+  teamcity-agent-1:
     image: jetbrains/teamcity-agent
     environment:
       - SERVER_URL=http://server:8111
-      - AGENT_NAME=regular_agent
-  teamcity-minimal-agent:
-    image: jetbrains/teamcity-minimal-agent
+      - AGENT_NAME=agent_1
+      - DOCKER_IN_DOCKER=start
+  teamcity-agent-2:
+    image: jetbrains/teamcity-agent
     environment:
       - SERVER_URL=http://server:8111
-      - AGENT_NAME=minimal_agent
+      - AGENT_NAME=agent_2
+      - DOCKER_IN_DOCKER=start
