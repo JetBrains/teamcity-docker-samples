@@ -10,7 +10,7 @@ TeamCity provides docker images for Linux and Windows containers. Windows images
 * [jetbrains/teamcity-agent](https://hub.docker.com/r/jetbrains/teamcity-agent)
 * [jetbrains/teamcity-server](https://hub.docker.com/r/jetbrains/teamcity-server)
 
-## How to start
+## Basic configurations
 
 Docker compose files for Linux containers are stored in `compose-ubuntu` directory, for Windows in `compose-windows`.
 
@@ -22,3 +22,8 @@ After start TeamCity server will be available on `http://localhost:8112/` in Lin
 ```
 explorer "http://$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' teamcitywindows_server_1):8111"
 ```
+
+## Multi-node configuration with several servers
+
+See README.md in [multinode folder](./multinode/)
+

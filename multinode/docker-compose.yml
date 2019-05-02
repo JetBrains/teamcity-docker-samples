@@ -1,0 +1,68 @@
+version: '3.1'
+ 
+
+# Default ${TEAMCITY_VERSION} is defined in .env file
+
+# ./buildserver_pgdata - Posgres DB data
+# ./data - TeamCity data directory
+# ./teamcity-server-logs1 - logs of primary TeamCity server
+# ./teamcity-server-logs2 - logs of secondary TeamCity server (running-builds node)
+# ./teamcity-server-logs3 - logs of read-only TeamCity server (secondary node)
+# ./teamcity-agent-conf1 - conf directory for the build agent
+
+services:
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: test
+      POSTGRES_DB: buildserver
+    volumes:
+      - ./buildserver_pgdata:/var/lib/postgresql/data
+
+  teamcity:
+    image: jetbrains/teamcity-server:${TEAMCITY_VERSION}
+    volumes:
+      - ./data:/data/teamcity_server/datadir
+      - ./teamcity-server-logs1:/opt/teamcity/logs
+    ports:
+      - 8111:8111
+
+  node1:
+    image: jetbrains/teamcity-server:${TEAMCITY_VERSION}
+    volumes:
+      - ./data:/data/teamcity_server/datadir
+      - ./teamcity-server-logs2:/opt/teamcity/logs
+    ports:
+      - 8112:8111
+    environment:
+      TEAMCITY_SERVER_OPTS: -Dteamcity.server.role=running-builds-node -Dteamcity.server.rootURL=http://node1:8111
+    
+  node2:
+    image: jetbrains/teamcity-server:${TEAMCITY_VERSION}
+    volumes:
+      - ./data:/data/teamcity_server/datadir
+      - ./teamcity-server-logs3:/opt/teamcity/logs
+    ports:
+    - 8113:8111
+    environment:
+      TEAMCITY_SERVER_OPTS: -Dteamcity.server.role=read-only-server -Dteamcity.server.rootURL=http://node2:8111
+  
+  teamcity-agent1:
+    image: jetbrains/teamcity-agent:latest
+    environment:
+      SERVER_URL: http://teamcity:8111
+    volumes:
+      - ./teamcity-agent-conf1:/data/teamcity_agent/conf
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  # teamcity-agent2:
+  #   image: jetbrains/teamcity-agent:latest
+  #   environment:
+  #     SERVER_URL: http://teamcity:8111
+  #   volumes:
+  #     - ./teamcity-agent-conf2:/data/teamcity_agent/conf
+  #     - /var/run/docker.sock:/var/run/docker.sock
