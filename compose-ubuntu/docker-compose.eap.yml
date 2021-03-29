@@ -1,8 +1,0 @@
-version: "3"
-services:
-  server:
-    image: jetbrains/teamcity-server:EAP
-  teamcity-agent:
-    image: jetbrains/teamcity-agent:EAP
-  teamteamcity-minimal-agent:
-    image: jetbrains/teamcity-minimal-agent:EAP

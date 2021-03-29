@@ -14,10 +14,12 @@ TeamCity provides docker images for Linux and Windows containers. Windows images
 
 Docker compose files for Linux containers are stored in `compose-ubuntu` directory, for Windows in `compose-windows`.
 
-* To run latest release use: `docker-compose up -d`
-* To run latest EAP use: `docker-compose -f docker-compose.yml -f docker-compose.eap.yml up -d`
+* Set TeamCity version in .env file (also could be 'EAP', or 'EAP-nanoserver-2004' for Windows). 
+* To run, use: `docker-compose up -d` command
+* After creating a user, visit ["Agents -> Unauthorized"](http://localhost:8112/agents.html?tab=unauthorizedAgents) to authorize the build agent.
 
-After start TeamCity server will be available on `http://localhost:8112/` in Linux containers. To open server URL on Windows execute the following command in PowerShell:
+After start TeamCity server will be available on `http://localhost:8112/` in Linux containers. 
+To open server URL on Windows execute the following command in PowerShell:
 
 ```
 explorer "http://$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' teamcitywindows_server_1):8111"
