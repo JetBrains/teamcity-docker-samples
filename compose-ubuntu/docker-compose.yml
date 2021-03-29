@@ -23,7 +23,7 @@ services:
     image: jetbrains/teamcity-agent:${TEAMCITY_VERSION}
     privileged: true
     volumes:
-      - ./agents/agent-1/conf:/data/teamcity_agents/conf
+      - ./agents/agent-1/conf:/data/teamcity_agent/conf
     environment:
       - AGENT_NAME="Agent 1"
       - SERVER_URL=http://teamcity:8111
@@ -32,7 +32,7 @@ services:
     image: jetbrains/teamcity-agent:${TEAMCITY_VERSION}
     privileged: true
     volumes:
-      - ./agents/agent-2/conf:/data/teamcity_agents/conf
+      - ./agents/agent-2/conf:/data/teamcity_agent/conf
     environment:
       - AGENT_NAME="Agent 2"
       - SERVER_URL=http://teamcity:8111
