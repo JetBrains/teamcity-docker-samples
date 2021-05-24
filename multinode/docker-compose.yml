@@ -23,6 +23,13 @@ services:
     volumes:
       - ./buildserver_pgdata:/var/lib/postgresql/data
 
+  nginx:
+    image: nginx:1.19
+    ports:
+      - 8222:8222
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+
   teamcity:
     image: jetbrains/teamcity-server:${TEAMCITY_VERSION}
     volumes:
@@ -46,7 +53,7 @@ services:
   teamcity-agent1:
     image: jetbrains/teamcity-agent:${TEAMCITY_VERSION}
     environment:
-      SERVER_URL: http://teamcity:8111
+      SERVER_URL: http://nginx:8222
     volumes:
       - ./teamcity-agent-conf1:/data/teamcity_agent/conf
       - /var/run/docker.sock:/var/run/docker.sock
@@ -54,7 +61,7 @@ services:
   teamcity-agent2:
     image: jetbrains/teamcity-agent:${TEAMCITY_VERSION}
     environment:
-      SERVER_URL: http://teamcity:8111
+      SERVER_URL: http://nginx:8222
     volumes:
       - ./teamcity-agent-conf2:/data/teamcity_agent/conf
       - /var/run/docker.sock:/var/run/docker.sock
