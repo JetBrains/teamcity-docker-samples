@@ -5,8 +5,8 @@ Starts TeamCity in docker-compose with several servers of different roles (Ubunt
 Requires at least 4Gb of RAM in the docker engine.
 
 - Uses Postgres DB (`psql -p5433 -hlocalhost -Utest -dbuildserver`, password `test`)
-- Starts 3 servers: primary, [running-builds node](https://confluence.jetbrains.com/display/TCD18/Configuring+Running+Builds+Node), [secondary node](https://confluence.jetbrains.com/display/TCD18/Configuring+Secondary+Node).
-- And, one build agent
+- Starts 2 servers: one primary, one secondary. 
+- And, two build agents
 
 For details on volumes, created folders, logs see [docker-compose.yml](./docker-compose.yml) file.
 
@@ -18,8 +18,7 @@ Next, open http://localhost:8111 for the initial setup.
 
 After creating a user, visit ["Agents -> Unauthorized"](http://localhost:8111/agents.html?tab=unauthorizedAgents) to authorize the build agent.
 
-
-See https://localhost:8111/admin/admin.html?item=nodesConfiguration for nodes configuration.
+See http://localhost:8111/admin/admin.html?item=nodesConfiguration for nodes configuration.
 
 ## To shutdown
 

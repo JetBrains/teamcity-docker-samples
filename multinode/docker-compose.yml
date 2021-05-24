@@ -35,34 +35,26 @@ services:
     image: jetbrains/teamcity-server:${TEAMCITY_VERSION}
     volumes:
       - ./data:/data/teamcity_server/datadir
+      - ./node1_data:/data/teamcity_server/node_datadir
       - ./teamcity-server-logs2:/opt/teamcity/logs
     ports:
       - 8112:8111
     environment:
-      TEAMCITY_SERVER_OPTS: -Dteamcity.server.role=running-builds-node -Dteamcity.server.rootURL=http://node1:8111
+      TEAMCITY_SERVER_OPTS: -Dteamcity.server.nodeId=node1 -Dteamcity.server.rootURL=http://teamcity:8111 -Dteamcity.data.path=/data/teamcity_server/datadir -Dteamcity.node.data.path=/data/teamcity_server/node_datadir
     
-  node2:
-    image: jetbrains/teamcity-server:${TEAMCITY_VERSION}
-    volumes:
-      - ./data:/data/teamcity_server/datadir
-      - ./teamcity-server-logs3:/opt/teamcity/logs
-    ports:
-    - 8113:8111
-    environment:
-      TEAMCITY_SERVER_OPTS: -Dteamcity.server.role=read-only-server -Dteamcity.server.rootURL=http://node2:8111
-  
+
   teamcity-agent1:
-    image: jetbrains/teamcity-agent:latest
+    image: jetbrains/teamcity-agent:${TEAMCITY_VERSION}
     environment:
       SERVER_URL: http://teamcity:8111
     volumes:
       - ./teamcity-agent-conf1:/data/teamcity_agent/conf
       - /var/run/docker.sock:/var/run/docker.sock
 
-  # teamcity-agent2:
-  #   image: jetbrains/teamcity-agent:latest
-  #   environment:
-  #     SERVER_URL: http://teamcity:8111
-  #   volumes:
-  #     - ./teamcity-agent-conf2:/data/teamcity_agent/conf
-  #     - /var/run/docker.sock:/var/run/docker.sock
+  teamcity-agent2:
+    image: jetbrains/teamcity-agent:${TEAMCITY_VERSION}
+    environment:
+      SERVER_URL: http://teamcity:8111
+    volumes:
+      - ./teamcity-agent-conf2:/data/teamcity_agent/conf
+      - /var/run/docker.sock:/var/run/docker.sock
