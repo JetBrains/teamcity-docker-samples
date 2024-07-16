@@ -7,7 +7,6 @@ version: '3.1'
 # ./data - TeamCity data directory
 # ./teamcity-server-logs1 - logs of primary TeamCity server
 # ./teamcity-server-logs2 - logs of secondary TeamCity server (running-builds node)
-# ./teamcity-server-logs3 - logs of read-only TeamCity server (secondary node)
 # ./teamcity-agent-conf1 - conf directory for the build agent
 
 services:
@@ -24,11 +23,16 @@ services:
       - ./buildserver_pgdata:/var/lib/postgresql/data
 
   nginx:
-    image: nginx:1.19
+    image: nginx:1.27.0
     ports:
       - 8222:8222
     volumes:
       - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      teamcity:
+        condition: service_healthy
+      node1:
+        condition: service_healthy
 
   teamcity:
     image: jetbrains/teamcity-server:${TEAMCITY_VERSION}
@@ -37,6 +41,8 @@ services:
       - ./teamcity-server-logs1:/opt/teamcity/logs
     ports:
       - 8111:8111
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://teamcity:8111/healthCheck/ready"]
 
   node1:
     image: jetbrains/teamcity-server:${TEAMCITY_VERSION}
@@ -48,7 +54,8 @@ services:
       - 8112:8111
     environment:
       TEAMCITY_SERVER_OPTS: -Dteamcity.server.nodeId=node1 -Dteamcity.server.rootURL=http://teamcity:8111 -Dteamcity.data.path=/data/teamcity_server/datadir -Dteamcity.node.data.path=/data/teamcity_server/node_datadir
-    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://node1:8111/healthCheck/ready"]
 
   teamcity-agent1:
     image: jetbrains/teamcity-agent:${TEAMCITY_VERSION}
