@@ -7,7 +7,6 @@ version: '3.1'
 # ./data - TeamCity data directory
 # ./teamcity-server-logs1 - logs of primary TeamCity server
 # ./teamcity-server-logs2 - logs of secondary TeamCity server (running-builds node)
-# ./teamcity-server-logs3 - logs of read-only TeamCity server (secondary node)
 # ./teamcity-agent-conf1 - conf directory for the build agent
 
 services:
