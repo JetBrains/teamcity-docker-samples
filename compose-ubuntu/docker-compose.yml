@@ -7,7 +7,7 @@ version: '3.1'
 # ./data_dir - TeamCity data directory
 # ./teamcity-server-logs - logs of primary TeamCity server
 # ./agents/agent-1/conf - configuration directory for the first build agent
-# ./agents/agent-1/conf - configuration directory for the second build agent
+# ./agents/agent-2/conf - configuration directory for the second build agent
 
 volumes:
   pgdata:
